@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from handlers.twilio_handler import router as twilio_router
-from pyngrok import ngrok
 from fastapi.staticfiles import StaticFiles
+from twilio_handler import router as twilio_router
+from pyngrok import ngrok
 import uvicorn
 import os
 
@@ -16,9 +16,8 @@ app.add_middleware(
 )
 
 os.makedirs("audio", exist_ok=True)
-app.include_router(twilio_router)
-
 app.mount("/audio", StaticFiles(directory="audio"), name="audio")
+app.include_router(twilio_router)
 
 @app.get("/")
 def health_check():
@@ -26,5 +25,5 @@ def health_check():
 
 if __name__ == "__main__":
     public_url = ngrok.connect(8000)
-    print(f"\n Public URL (paste this in Twilio): {public_url}/twilio/voice\n")
+    print(f"\n Paste this in Twilio dashboard: {public_url}/twilio/voice\n")
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
