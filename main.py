@@ -4,6 +4,7 @@ from twilio_handler import router as twilio_router
 from pyngrok import ngrok
 from fastapi.staticfiles import StaticFiles
 import uvicorn
+import os
 
 app = FastAPI()
 
@@ -14,6 +15,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+os.makedirs("audio", exist_ok=True)
 app.include_router(twilio_router)
 
 app.mount("/audio", StaticFiles(directory="audio"), name="audio")
