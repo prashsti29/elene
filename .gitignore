@@ -1,3 +1,6 @@
 .env
 elenecredentials.json
 venv/
+.venv/
+__pycache__/
+*.pyc
