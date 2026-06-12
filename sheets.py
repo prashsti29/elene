@@ -20,14 +20,12 @@ async def save_to_sheets(state: CallerState):
         state.phone,
         state.email,
         state.role,
-        state.property_type,
-        state.location,
-        state.price_expectation
+        state.property_type
     ]]
     
     client.spreadsheets().values().append(
         spreadsheetId=SHEET_ID,
-        range="Sheet1!A:G",
+        range="Sheet1!A:E",
         valueInputOption="RAW",
         body={"values": row}
     ).execute()
