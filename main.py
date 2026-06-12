@@ -1,30 +1,20 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from twilio_handler import router as twilio_router
-from pyngrok import ngrok
 from fastapi.staticfiles import StaticFiles
-import uvicorn
+from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
 import os
 
-app = FastAPI()
+load_dotenv()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+app = FastAPI(title="Real Estate Voice Agent")
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"]) 
 
-os.makedirs("audio", exist_ok=True)
-app.include_router(twilio_router)
-
+# serve audio files
 app.mount("/audio", StaticFiles(directory="audio"), name="audio")
 
-@app.get("/")
-def health_check():
-    return {"status": "Voice agent running"}
+from twilio_handler import router as twilio_router
+app.include_router(twilio_router)
 
 if __name__ == "__main__":
-    public_url = ngrok.connect(8000)
-    print(f"\n Public URL (paste this in Twilio): {public_url}/twilio/voice\n")
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    import uvicorn
+    uvicorn.run("main:app", host="0.0.0.0", port=int(os.getenv("PORT", 8000)), reload=True)
