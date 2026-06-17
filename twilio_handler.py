@@ -48,8 +48,9 @@ async def handle_response(
     response = VoiceResponse()
 
     if state.is_complete() and state.data_saved:
-        response.say("Thank you! We have all your details. Goodbye!")
-        response.hangup()
+         return _end_call(
+        "Thank you! We have all your details. Goodbye!"
+    )
     else:
         gather = Gather(
             input="speech",
