@@ -33,8 +33,8 @@ EXTRACT_PROMPT = """Extract information from the user message. Return ONLY valid
 - Only populate what the user explicitly stated. null for everything else."""
 
 def build_messages(state: CallerState, user_input: str):
-    messages = [SystemMessage(content=SYSTEM_PROMPT)]
-    
+        messages = [SystemMessage(content=SYSTEM_PROMPT)]
+        
     for turn in state.conversation_history[:-1]:
         if turn["role"] == "user":
             messages.append(HumanMessage(content=turn["content"]))
